@@ -1,4 +1,5 @@
-from sqlalchemy import or_, select
+from datetime import datetime
+from sqlalchemy import func, or_, select
 from sqlalchemy.orm import Session
 
 from .models import Paper, Project, ProjectPaper
@@ -379,16 +380,7 @@ def list_project_papers(
 def remove_paper_from_project(
     session: Session, project_id: int, paper_id: int
 ) -> bool:
-    """프로젝트에서 문헌 연결을 제거한다 (Paper 레코드 자체는 삭제하지 않음).
-
-    Args:
-        session: SQLAlchemy session.
-        project_id: Project ID.
-        paper_id: Paper ID.
-
-    Returns:
-        True if removed, False if association not found.
-    """
+    """프로젝트에서 문헌 연결을 제거한다 (Paper 레코드 자체는 삭제하지 않음)."""
     pp = session.execute(
         select(ProjectPaper).where(
             ProjectPaper.project_id == project_id,
@@ -400,3 +392,89 @@ def remove_paper_from_project(
     session.delete(pp)
     session.flush()
     return True
+
+
+# ── Aggregate / Dashboard helpers ─────────────────────────────────────────────
+
+def count_project_papers(
+    session: Session, project_id: int, status: str | None = None
+) -> int:
+    stmt = (
+        select(func.count())
+        .select_from(ProjectPaper)
+        .where(ProjectPaper.project_id == project_id)
+    )
+    if status is not None:
+        stmt = stmt.where(ProjectPaper.status == status)
+    return session.execute(stmt).scalar_one()
+
+
+def count_all_papers(session: Session) -> int:
+    return session.execute(select(func.count()).select_from(Paper)).scalar_one()
+
+
+def count_all_projects(session: Session) -> int:
+    return session.execute(select(func.count()).select_from(Project)).scalar_one()
+
+
+def count_papers_this_month(session: Session) -> int:
+    now = datetime.now()
+    start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    return session.execute(
+        select(func.count()).select_from(Paper).where(Paper.added_at >= start)
+    ).scalar_one()
+
+
+def get_recent_projects(session: Session, limit: int = 5) -> list[Project]:
+    return list(
+        session.execute(
+            select(Project).order_by(Project.updated_at.desc()).limit(limit)
+        ).scalars().all()
+    )
+
+
+def get_distinct_tags(session: Session, project_id: int) -> list[str]:
+    pps = list_project_papers(session, project_id)
+    tags: set[str] = set()
+    for pp in pps:
+        if pp.tags:
+            tags.update(pp.tags)
+    return sorted(tags)
+
+
+def list_project_papers_with_filters(
+    session: Session,
+    project_id: int,
+    status: str | None = None,
+    tags: list[str] | None = None,
+    sort_by: str = "added_at",
+    sort_desc: bool = True,
+) -> list[ProjectPaper]:
+    from sqlalchemy.orm import joinedload
+
+    stmt = (
+        select(ProjectPaper)
+        .options(joinedload(ProjectPaper.paper))
+        .where(ProjectPaper.project_id == project_id)
+    )
+    if status is not None:
+        stmt = stmt.where(ProjectPaper.status == status)
+    results = list(session.execute(stmt).scalars().all())
+
+    if tags:
+        results = [
+            pp for pp in results
+            if pp.tags and any(t in pp.tags for t in tags)
+        ]
+
+    def _key(pp: ProjectPaper):
+        if sort_by == "year":
+            return pp.paper.year or 0
+        if sort_by == "citation_count":
+            return pp.paper.citation_count or 0
+        if sort_by == "title":
+            return (pp.paper.title or "").lower()
+        return pp.added_at
+
+    results.sort(key=_key, reverse=sort_desc)
+    return results

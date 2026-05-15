@@ -35,3 +35,36 @@ streamlit run app.py
 | `CONTACT_EMAIL` | 建議 | 自填，用於 Crossref/OpenAlex polite pool |
 
 > Semantic Scholar 免費方案有速率限制，建議申請 API key 以提高配額。
+
+## Phase 1 實作狀態
+
+### 已完成 ✅
+- Semantic Scholar 分層搜尋策略（relevance / recent / highly_cited / review）
+- Claude 深度分析，grounded 事實與 inferred 推論分離
+- 跨文獻比較（共通主題、對立觀點、研究缺口、綜述建議）
+- 專案管理（CRUD、多專案切換）
+- 文獻庫管理（篩選、標籤、備註、狀態管理）
+- Streamlit 端到端 UI 整合
+
+### Phase 2/3 計畫實作 ❌
+- Crossref / OpenAlex 整合
+- 使用者上傳段落評估引用適切性
+- 引用網絡探索（references / citations）
+- BibTeX / RIS 匯出
+- Zotero 整合
+- DOI 驗證（透過 Crossref 反查）
+- 多輪對話追問
+
+## 手動測試清單（Smoke Test）
+
+1. 啟動 app：`streamlit run app.py`，確認首頁正常載入
+2. 至「📋 專案管理」，建立第一個專案（名稱必填）
+3. 確認左側專案選擇器自動切換到新專案
+4. 至「🔍 搜尋文獻」，輸入 `nursing burnout COVID-19`，點「🔍 搜尋」
+5. 確認顯示 5 篇結果，其中有 abstract 的篇目 checkbox 可勾選
+6. 勾選至少 2 篇有 abstract 的文獻，確認出現「⚡ 分析」按鈕
+7. 點「分析」，確認 progress bar 依序更新，完成後顯示跨文獻比較與個別分析卡片
+8. 對 1 篇點「✅ 確認加入專案」，確認按鈕變為「✅ 已加入專案」
+9. 切換至「📚 文獻庫管理」，確認剛才加入的文獻出現
+10. 展開該文獻的「✏️ 編輯」，修改 user_notes 並「💾 儲存變更」
+11. 重新整理頁面（F5），確認備註仍存在於文獻庫
