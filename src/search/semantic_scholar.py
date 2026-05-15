@@ -6,6 +6,7 @@ from typing import Any
 
 import httpx
 
+from src.config import settings
 from src.search.base import BaseSearchClient, RateLimiter, SearchFilters, SearchStrategy
 from src.search.exceptions import APIError
 from src.storage.schemas import Author, PaperCreate
@@ -47,27 +48,31 @@ class SemanticScholarClient(BaseSearchClient):
         contact_email: str | None = None,
         http_client: httpx.Client | None = None,
     ) -> None:
-        # Treat empty string as no key
-        resolved_key = api_key or None
-        if resolved_key is None:
-            try:
-                from src.config import get_config
-                cfg = get_config()
-                resolved_key = cfg.semantic_scholar_api_key or None
-                contact_email = contact_email or cfg.contact_email
-            except Exception:
-                pass
+        if api_key is None:
+            api_key = settings.semantic_scholar_api_key
 
-        rate = 0.8 if resolved_key else 0.3
+        self.api_key = api_key.strip() if api_key else ""
+        contact_email = contact_email or settings.contact_email
+
+        if self.api_key:
+            self._auth_mode = "authenticated"
+            rate = 0.8
+        else:
+            self._auth_mode = "unauthenticated"
+            rate = 0.3
+
         super().__init__(
             rate_limiter=RateLimiter(max_per_second=rate),
             contact_email=contact_email,
             http_client=http_client,
         )
-        self._api_key = resolved_key
         self._headers: dict[str, str] = {}
-        if self._api_key:
-            self._headers["x-api-key"] = self._api_key
+        if self.api_key:
+            self._headers["x-api-key"] = self.api_key
+
+    @property
+    def auth_mode(self) -> str:
+        return self._auth_mode
 
     # ── Public interface ──────────────────────────────────────────────────────
 

@@ -12,13 +12,10 @@ from pathlib import Path
 # Ensure project root is on the path when run directly
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-# Provide a dummy value so Config validation doesn't fail when
+# Provide a dummy value so Settings validation doesn't fail when
 # ANTHROPIC_API_KEY isn't set in the shell (only S2 key is needed here).
 os.environ.setdefault("ANTHROPIC_API_KEY", "dummy-for-manual-check")
-
-from dotenv import load_dotenv
-
-load_dotenv()
+os.environ.setdefault("CONTACT_EMAIL", "dummy@example.com")
 
 from src.search import SearchFilters, SemanticScholarClient
 from src.search.exceptions import SearchError
@@ -26,8 +23,6 @@ from src.search.exceptions import SearchError
 QUERY = "nursing burnout COVID-19"
 STRATEGIES = ["relevance", "recent", "highly_cited", "review"]
 LIMIT = 5
-# Extra sleep between strategy calls to reduce 429 risk for unauthenticated mode
-BETWEEN_STRATEGY_SLEEP = 5.0
 
 
 def _banner(text: str) -> None:
@@ -46,20 +41,22 @@ def _print_paper(i: int, paper) -> None:
 
 
 def main() -> None:
-    api_key = os.getenv("SEMANTIC_SCHOLAR_API_KEY") or None
-    mode = "authenticated" if api_key else "unauthenticated (0.3 req/s)"
-    print(f"\nSemantic Scholar API mode: {mode}")
+    client = SemanticScholarClient()
+    rate = 0.8 if client.auth_mode == "authenticated" else 0.3
+    print(f"\nMode: {client.auth_mode} ({rate} req/s)")
     print(f"Query: {QUERY!r}")
 
-    client = SemanticScholarClient(api_key=api_key)
+    # Shorter sleep is safe in authenticated mode
+    sleep_between = 1.0 if client.auth_mode == "authenticated" else 5.0
+
     total_start = time.monotonic()
     api_call_count = 0
     found_doi: str | None = None
 
     for idx, strategy in enumerate(STRATEGIES):
         if idx > 0:
-            print(f"\n  (waiting {BETWEEN_STRATEGY_SLEEP}s between strategies...)")
-            time.sleep(BETWEEN_STRATEGY_SLEEP)
+            print(f"\n  (waiting {sleep_between}s between strategies...)")
+            time.sleep(sleep_between)
 
         _banner(f"Strategy: {strategy}  (limit={LIMIT})")
         t0 = time.monotonic()
@@ -85,8 +82,8 @@ def main() -> None:
         test_doi = "10.1016/j.nepr.2023.103643"  # known S2 paper
 
     print(f"  DOI: {test_doi}")
-    print(f"  (waiting {BETWEEN_STRATEGY_SLEEP}s before fetch...)")
-    time.sleep(BETWEEN_STRATEGY_SLEEP)
+    print(f"  (waiting {sleep_between}s before fetch...)")
+    time.sleep(sleep_between)
     t0 = time.monotonic()
     try:
         paper = client.get_paper_by_doi(test_doi)

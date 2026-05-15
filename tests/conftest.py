@@ -2,6 +2,7 @@ import os
 
 # Must be set before any src imports so that get_config() validation passes.
 os.environ.setdefault("ANTHROPIC_API_KEY", "test-key-for-testing")
+os.environ.setdefault("CONTACT_EMAIL", "test@example.com")
 
 import pytest
 from sqlalchemy import create_engine, event
