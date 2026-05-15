@@ -18,8 +18,8 @@ data/*.sqlite
 # Streamlit
 .streamlit/secrets.toml
 
-# Dev scripts
-scripts/
+# Dev scripts — exclude ad-hoc one-off scripts only at project root
+/manual_check_*.py
 
 # IDE
 .vscode/

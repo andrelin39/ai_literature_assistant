@@ -1,0 +1,104 @@
+{
+  "search_results": {
+    "total": 3,
+    "offset": 0,
+    "next": 3,
+    "data": [
+      {
+        "paperId": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2",
+        "externalIds": {
+          "DOI": "10.1016/j.ijns.2023.104567",
+          "PubMed": "37654321",
+          "MAG": "3456789012"
+        },
+        "title": "Nursing burnout during COVID-19: A systematic review and meta-analysis of prevalence and risk factors",
+        "abstract": "Background: The COVID-19 pandemic significantly increased workload and psychological burden on nurses. Objectives: To estimate the global prevalence of burnout among nurses during the COVID-19 pandemic and identify associated risk factors. Methods: Systematic review with meta-analysis following PRISMA guidelines. Data sources: PubMed, CINAHL, and Embase (January 2020 to December 2022). Results: 45 studies (n=28,432 nurses) were included. Pooled prevalence of burnout was 41.8% (95% CI: 36.2-47.5). Female sex, ICU work, and lack of PPE were significant risk factors.",
+        "year": 2023,
+        "venue": "International Journal of Nursing Studies",
+        "authors": [
+          {"authorId": "11111111", "name": "Chen Wei"},
+          {"authorId": "22222222", "name": "Sarah Johnson"},
+          {"authorId": "33333333", "name": "Maria Garcia"}
+        ],
+        "citationCount": 127,
+        "publicationTypes": ["JournalArticle", "Review"],
+        "publicationDate": "2023-03-15",
+        "openAccessPdf": {
+          "url": "https://europepmc.org/articles/pmc9876543/pdf",
+          "status": "HYBRID"
+        },
+        "url": "https://www.semanticscholar.org/paper/a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2",
+        "fieldsOfStudy": ["Medicine", "Nursing"]
+      },
+      {
+        "paperId": "b2c3d4e5f6a7b2c3d4e5f6a7b2c3d4e5f6a7b2c3",
+        "externalIds": {
+          "ArXiv": "2305.12345",
+          "MAG": "4567890123"
+        },
+        "title": "Large language models for automated literature screening in systematic reviews: A benchmark study",
+        "abstract": null,
+        "year": 2023,
+        "venue": "arXiv",
+        "authors": [
+          {"authorId": "44444444", "name": "Alex Kim"},
+          {"authorId": "55555555", "name": "Jordan Lee"}
+        ],
+        "citationCount": 8,
+        "publicationTypes": ["JournalArticle"],
+        "publicationDate": "2023-05-20",
+        "openAccessPdf": {
+          "url": "https://arxiv.org/pdf/2305.12345",
+          "status": "GREEN"
+        },
+        "url": "https://www.semanticscholar.org/paper/b2c3d4e5f6a7b2c3d4e5f6a7b2c3d4e5f6a7b2c3",
+        "fieldsOfStudy": ["Computer Science", "Medicine"]
+      },
+      {
+        "paperId": "c3d4e5f6a7b8c3d4e5f6a7b8c3d4e5f6a7b8c3d4",
+        "externalIds": {
+          "DOI": "10.1097/NNR.0000000000000312",
+          "PubMed": "29045334",
+          "MAG": "2567890124"
+        },
+        "title": "Burnout and Its Consequences for Nurses: A Review of the State of the Science",
+        "abstract": null,
+        "year": 2018,
+        "venue": "Nursing Research",
+        "authors": [
+          {"authorId": "66666666", "name": "Patricia Poghosyan"}
+        ],
+        "citationCount": 412,
+        "publicationTypes": ["JournalArticle", "Review"],
+        "publicationDate": "2018-01-01",
+        "openAccessPdf": null,
+        "url": "https://www.semanticscholar.org/paper/c3d4e5f6a7b8c3d4e5f6a7b8c3d4e5f6a7b8c3d4",
+        "fieldsOfStudy": ["Medicine", "Nursing", "Psychology"]
+      }
+    ]
+  },
+  "single_paper": {
+    "paperId": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2",
+    "externalIds": {
+      "DOI": "10.1016/j.ijns.2023.104567",
+      "PubMed": "37654321"
+    },
+    "title": "Nursing burnout during COVID-19: A systematic review and meta-analysis of prevalence and risk factors",
+    "abstract": "Background: The COVID-19 pandemic significantly increased workload and psychological burden on nurses.",
+    "year": 2023,
+    "venue": "International Journal of Nursing Studies",
+    "authors": [
+      {"authorId": "11111111", "name": "Chen Wei"},
+      {"authorId": "22222222", "name": "Sarah Johnson"}
+    ],
+    "citationCount": 127,
+    "publicationTypes": ["JournalArticle", "Review"],
+    "publicationDate": "2023-03-15",
+    "openAccessPdf": {
+      "url": "https://europepmc.org/articles/pmc9876543/pdf",
+      "status": "HYBRID"
+    },
+    "url": "https://www.semanticscholar.org/paper/a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2",
+    "fieldsOfStudy": ["Medicine", "Nursing"]
+  }
+}
