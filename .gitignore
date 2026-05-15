@@ -18,6 +18,9 @@ data/*.sqlite
 # Streamlit
 .streamlit/secrets.toml
 
+# Dev scripts
+scripts/
+
 # IDE
 .vscode/
 .idea/
